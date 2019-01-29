@@ -105,3 +105,6 @@ venv.bak/
 
 # Auth info
 auth_tokens.py
+
+# Ignore text data
+/*.txt
