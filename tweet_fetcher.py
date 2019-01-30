@@ -20,19 +20,21 @@ class TweetFetcher(object):
 
         self.api = tweepy.API(auth)
 
-    def fetch_hashtag(self, tag, max_to_fetch=200, language='en'):
+    def fetch_hashtag(self, tag, max_to_fetch=200, language='en', no_RT= True):
         """
         Fetches the tweets that match a hashtag search
         """
-        query = tag
+        query = tag + " -filter:retweets" if no_RT else tag
+
         lang = language
+
         rpp = 100 # The number of tweets returned per page, 100 is max
 
         hash_search = tweepy.Cursor(self.api.search, q=query, 
-                                    rpp=rpp, lang=lang).items(max_to_fetch)
-        for tweet in hash_search:
+                                    rpp=rpp, lang=lang,).items(max_to_fetch)
+        for page in hash_search:
             with open('tweets_with_hashtag_#Apple.txt', 'a') as the_file:
-                the_file.write(str(tweet.text.encode('utf-8')) + '\n')
+                the_file.write(str(page.text.encode('utf-8')) + '\n')
 
         print('Extracted {} tweets with hashtag {}'.format(max_to_fetch, 
                                                            query))
